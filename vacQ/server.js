@@ -1,6 +1,11 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const cookieParser = require("cookie-parser");
+const mongoSanitize = require("express-mongo-sanitize");
+const helmet = require("helmet ");
+const xss = require("xss-clean");
+const rateLimit = require("express-rate-limit");
+const hpp = require("hpp");
 const connectDB = require("./config/db");
 
 const hospitals = require("./routes/hospitals");
@@ -18,10 +23,16 @@ const corsOptions = {
   credentials: true, //access-control-allow-credentials:true
   optionSuccessStatus: 200,
 };
+const limiter = rateLimit({ windowsMs: 10 * 60 * 100, max: 100 });
 
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
+app.use(mongoSanitize());
+app.use(helmet());
+app.use(xss());
+app.use(limiter);
+app.use(hpp());
 
 app.use("/api/v1/hospitals", hospitals);
 app.use("/api/v1/appointments", appointments);

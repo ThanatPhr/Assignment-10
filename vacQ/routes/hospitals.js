@@ -1,4 +1,4 @@
-const express = require("express");
+const express = require('express')
 const {
   getHospitals,
   createHospital,
@@ -6,25 +6,25 @@ const {
   deleteHospital,
   updateHospital,
   getVacCenters,
-} = require("../controller/hospitals");
+} = require('../controller/hospitals')
 
-const appointmentRouter = require("./appointments");
+const appointmentRouter = require('./appointments')
 
-const router = express.Router();
+const router = express.Router()
 
-const { protect, authorize } = require("../middleware/auth");
+const { protect, authorize } = require('../middleware/auth')
 
-router.use("/:hospitalId/appointments", appointmentRouter);
+router.use('/:hospitalId/appointments', appointmentRouter)
 
-router.route("/vacCenters").get(getVacCenters);
+router.route('/vacCenters').get(getVacCenters)
 router
-  .route("/")
+  .route('/')
   .get(getHospitals)
-  .post(protect, authorize("admin"), createHospital);
+  .post(protect, authorize('admin'), createHospital)
 router
-  .route("/:id")
+  .route('/:id')
   .get(getHospital)
-  .delete(protect, authorize("admin"), deleteHospital)
-  .put(protect, authorize("admin"), updateHospital);
+  .delete(protect, authorize('admin'), deleteHospital)
+  .put(protect, authorize('admin'), updateHospital)
 
-module.exports = router;
+module.exports = router
